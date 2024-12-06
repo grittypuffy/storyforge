@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "storyforge"
+version = "0.1.0"
+description = "Transforming Writing with AI and Intel® Technology"
+authors = ["grittypuffy <grittypuffy@riseup.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
