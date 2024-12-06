@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 fastapi = { version = "^0.115.6", extras = ["standard"] }
 uvicorn = "^0.32.1"
+optimum = { version = "^1.23.3", extras = ["openvino"] }
 
 
 [build-system]
