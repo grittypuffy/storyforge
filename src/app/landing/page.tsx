@@ -1,11 +1,12 @@
 "use client";
 import Database from "@tauri-apps/plugin-sql";
+import Sparkle from "@/../public/ai.svg";
 
 import { Input } from "@nextui-org/input";
 import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -62,11 +63,12 @@ export default function Landing() {
     <>
       <div className="grid items-center justify-items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <main className="flex flex-col gap-8 row-start-1 items-center justify-center justify-items-center sm:items-start">
-          <h1 className="text-5xl font-medium">
+          <h1 className="text-5xl font-medium flex flex-row">
             Welcome to{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
+            <span className="ml-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
               StoryForge
             </span>
+            <Sparkle/>
           </h1>
           <h3 className="text-2xl font-medium">
             Create a profile to get started
