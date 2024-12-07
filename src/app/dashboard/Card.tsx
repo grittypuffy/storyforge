@@ -3,16 +3,16 @@ import { BookMarked, Baby } from "lucide-react"; // Import the required icons
 
 interface CardProps {
   projectName: string;
-  caption: "Novel" | "Children's book"; // Update the caption prop type
+  caption: string; // Update the caption prop type
   lastUpdated: string;
   synopsis: string;
   imageUrl: string;
-  projectType: "Novel" | "Children's book"; // Add projectType prop
+  projectType: "Novel" | "Children's Book"; // Add projectType prop
 }
 
 const typeIcons = {
   Novel: <BookMarked size={20} className="mr-2 text-primary" />,
-  "Children's book": <Baby size={20} className="mr-2 text-primary" />,
+  "Children's Book": <Baby size={20} className="mr-2 text-primary" />,
 };
 
 export default function ProjectCard({
@@ -29,7 +29,7 @@ export default function ProjectCard({
       <CardHeader className="pb-0 pt-4 px-6 flex-col items-start">
         <h4 className="font-bold text-lg text-default-800">{projectName}</h4>
         <div className="flex items-center mt-2">
-          {typeIcons[caption]} {/* Render icon based on caption */}
+          {typeIcons[projectType]} {/* Render icon based on caption */}
           <p className="text-xs uppercase font-semibold text-default-500">
             {caption}
           </p>

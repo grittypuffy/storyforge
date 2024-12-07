@@ -1,8 +1,5 @@
 "use client";
-import Database, { QueryResult } from "@tauri-apps/plugin-sql";
-import { window } from "@tauri-apps/api";
-
-const appWindow = window;
+import Database from "@tauri-apps/plugin-sql";
 
 import { Input } from "@nextui-org/input";
 import { Avatar } from "@nextui-org/avatar";
@@ -12,7 +9,8 @@ import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import inputStyles from "@/utils/input/styles";
 
 export default function Landing() {
   const [avatar, setAvatar] = useState("/avatar.png"); // Default image path
@@ -44,7 +42,8 @@ export default function Landing() {
         console.log(queryResult.length);
       } else {
         let uuid = uuidv4();
-        await db.execute(
+        await db
+          .execute(
             "INSERT INTO profile (id, profile_name, avatar) VALUES ($1, $2, $3)",
             [uuid, profileName, avatar]
           )
@@ -55,7 +54,7 @@ export default function Landing() {
           });
       }
     } else {
-        console.log("No profile name");
+      console.log("No profile name");
     }
   };
 
@@ -64,7 +63,7 @@ export default function Landing() {
       <div className="grid items-center justify-items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <main className="flex flex-col gap-8 row-start-1 items-center justify-center justify-items-center sm:items-start">
           <h1 className="text-5xl font-medium">
-            Welcome to
+            Welcome to{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
               StoryForge
             </span>
@@ -73,6 +72,7 @@ export default function Landing() {
             Create a profile to get started
           </h3>
           <form className="flex flex-col space-y-12">
+            {/* Avatar component */}
             <div className="relative cursor-pointer grid justify-items-center justify-center items-center">
               <label
                 htmlFor="avatar"
@@ -93,38 +93,23 @@ export default function Landing() {
                 />
               </label>
             </div>
+
+            {/* Profile name input component */}
+
             <Input
               type="text"
               label="Profile Name"
               placeholder="Enter your profile name"
-              classNames={{
-                label: "text-black/80 dark:text-white/90",
-                input: [
-                  "bg-transparent",
-                  "text-black/90 dark:text-white/90",
-                  "placeholder:text-black/50 dark:placeholder:text-white/60",
-                ],
-                innerWrapper: "bg-transparent",
-                inputWrapper: [
-                  "shadow-xl",
-                  "bg-slate-100",
-                  "dark:bg-default/20",
-                  "backdrop-blur-xl",
-                  "backdrop-saturate-200",
-                  "hover:bg-default/70",
-                  "dark:hover:bg-default/30",
-                  "group-data-[focus=true]:bg-default-200/50",
-                  "dark:group-data-[focus=true]:bg-default/60",
-                  "!cursor-text",
-                ],
-              }}
+              classNames={inputStyles}
               isRequired
               onChange={(event) => setProfileName(event.target.value)}
             />
+
+            {/* Next button for proceeding with dashboard */}
             <div className="flex row-start-3 flex-wrap items-end justify-end">
               <Button
                 color="primary"
-                endContent={<ChevronRight/>}
+                endContent={<ChevronRight />}
                 onClick={createProfile}
               >
                 Next
