@@ -1,15 +1,11 @@
 "use client";
-import Database from "@tauri-apps/plugin-sql";
 
 import { Input, Textarea } from "@nextui-org/input";
-import { Avatar } from "@nextui-org/avatar";
 import { Button } from "@nextui-org/button";
 
 import { Baby, BookMarked, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { v4 as uuidv4 } from "uuid";
 import inputStyles from "@/utils/input/styles";
 import {
   Image,
@@ -86,7 +82,7 @@ export default function Landing() {
               isRequired
               onChange={(event) => setGenre(event.target.value)}
             >
-              {genres.map((genre) => (
+              {genres.map((genre: any) => (
                 <SelectItem key={genre.key}>{genre.label}</SelectItem>
               ))}
             </Select>

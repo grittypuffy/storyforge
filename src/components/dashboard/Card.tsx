@@ -1,5 +1,9 @@
 import { Card, CardHeader, CardBody, Image, Button } from "@nextui-org/react";
 import { BookMarked, Baby } from "lucide-react"; // Import the required icons
+<<<<<<< HEAD
+=======
+import React from "react";
+>>>>>>> frontend/profile
 
 interface CardProps {
   projectName: string;
