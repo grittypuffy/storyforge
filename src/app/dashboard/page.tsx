@@ -33,13 +33,12 @@ export default function Dashboard() {
   return (
     <>
       <div className="grid items-center justify-items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 row-start-2 items-center justify-center justify-items-center sm:items-start">
-          <h1>Welcome</h1>
-        </main>
+        {/*<main className="flex flex-col gap-8 row-start-2 items-center justify-center justify-items-center sm:items-start">
+        </main>*/}
         <div className="grid gap-16 p-8">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Your Projects</h1>
-            <Link href="/project/create">
+            <Link href="../project/create">
             <Button color="primary" variant="bordered">
               Create New Project
             </Button>
@@ -52,7 +51,7 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div className="flex justify-between items-center mt-12">
+          <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold">Favourites</h1>
           </div>
 

@@ -134,7 +134,7 @@ export default function Landing() {
             <div className="flex flex-row items-center justify-between w-6/12">
               <h4 className="text-2xl font-medium">Characters</h4>
               <Button onPress={onOpen} color="primary">
-                Create one
+                Add a character
               </Button>
             </div>
             <div className="w-6/12 min-h-44 flex flex-col items-center justify-center justify-items-center bg-default-100 rounded-lg">
@@ -243,7 +243,7 @@ export default function Landing() {
             <Button
               color="primary"
               className="mt-8 w-6/12">
-              Submit
+              Create
             </Button>
             </Link>
           </form>
