@@ -61,3 +61,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 **/*/__pycache__/**/*
+
+bun.lockb
