@@ -12,6 +12,7 @@ uvicorn = "^0.32.1"
 optimum = { version = "^1.23.3", extras = ["openvino"] }
 huggingface-hub = "^0.26.5"
 openvino-genai = "^2024.5.0.0"
+diffusers = "^0.31.0"
 
 
 [build-system]
