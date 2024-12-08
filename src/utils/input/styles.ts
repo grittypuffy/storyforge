@@ -9,7 +9,7 @@ const inputStyles = {
         inputWrapper: [
           "shadow-xl",
           "bg-slate-100",
-          "dark:bg-default/20",
+          "dark:bg-default-400/90",
           "backdrop-blur-xl",
           "backdrop-saturate-200",
           "hover:bg-default/70",

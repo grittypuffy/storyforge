@@ -2,11 +2,28 @@
 
 > Transforming Writing with AI and Intel® Technology
 
+# Technologies Used
+
+1. **Optimum Intel:**
+    Python library designed for enabling and acceleration of AI workloads on Intel hardware. This aids in efficient generation of
+    text and images for creative writers right from in-editor suggestions to character images. It provides an interface between
+    diffusers and transformers for optimized performance on end-devices.
+
+2. **Intel OpenVINO:**
+    Open-source software toolkit used for optimization of deep learning models.
+
+3. **Tauri:**
+    Cross-platform desktop application framework used for developing StoryForge. It supports usage of existing web frameworks for faster development, without
+    sacrificing performance, bundle size and security. This ensures enhanced user experience (UX) and offline operation, without the need for a network, under the privacy
+    of theyr own devices.
+
+4. **Next.js:**
+
 # Development
 
 ## Structure
 
-The project is structured as a monorepo with the following folders:
+The project is structured as a monorepository with the following folders:
 
 - `src`: Contains Next.js frontend source code.
 - `src-tauri`: Contains Tauri specific configuration, handlers, and entry point for desktop application.
@@ -19,7 +36,7 @@ Ensure you have the following dependencies installed on your system:
 
 1. [Bun](https://bun.sh): Performant JavaScript runtime, bundler and dependency manager used for the frontend.
 2. [Rust](https://www.rust-lang.org): Used for building cross-platform desktop application with Tauri. Install it via [`rustup`](https://www.rust-lang.org/learn/get-started)
-3. [Poetry](https://python-poetry.org/): Packaging and dependency manager for Python, used for the FastAPI backend.
+3. [Poetry](https://python-poetry.org/): Packaging and dependency manager for Python, used for the FastAPI backend. It is assumed that you have Python installed on your system.
 
 ## Building the project
 
