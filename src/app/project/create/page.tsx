@@ -1,13 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
-import Sparkle from "@/../public/ai.svg";
-import { useRouter } from "next/navigation";
-
 import { Baby, BookMarked } from "lucide-react";
-
-import inputStyles from "@/utils/input/styles";
 import {
   Button,
   Input,
@@ -27,15 +20,26 @@ import {
   Form,
 } from "@nextui-org/react";
 
+import { FormEvent, Suspense, useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { load } from "@tauri-apps/plugin-store";
+import Database from "@tauri-apps/plugin-sql";
+import * as path from '@tauri-apps/api/path';
+
+import { v4 as uuidv4 } from "uuid";
+
+import Sparkle from "@/../public/ai.svg";
+import CharacterCard from "@/components/character/Card";
+import { Profile } from "@/utils/profile/query";
+import inputStyles from "@/utils/input/styles";
 import genres from "@/utils/project/genres";
 import {
   Character,
   ProjectDetails,
   ProjectExtras,
 } from "@/utils/project/models";
-import { load } from "@tauri-apps/plugin-store";
-import { Profile } from "@/utils/profile/query";
-import CharacterCard from "@/components/character/Card";
 
 export default function CreateProject() {
   const router = useRouter();
@@ -71,6 +75,35 @@ export default function CreateProject() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [loading, setLoading] = useState(true);
+
+  const createNewProject = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const db = await Database.load("sqlite:storyforge.db");
+    if (profile !== "") {
+      let queryResult: Array<string> = await db.select(
+        "SELECT profile_id from profile where profile_name = $1",
+        [profile]
+      );
+      if (queryResult.length !== 0) {
+        let uuid = uuidv4();
+        await db
+          .execute(
+            "INSERT INTO project (id, profile_id, title, genre, category, deadline, created_at, recently_updated, synopsis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+            [uuid, queryResult[0], projectData.name, projectData.genre, projectData.category, projectData.deadline, projectData.created_at, projectData.recently_updated, projectData.synopsis]
+          )
+          .then(async (queryResult) => {
+            if (queryResult) {
+              let homeDir = await path.homeDir();
+              let storyDir = await path.join(homeDir, 'storyforge', profile || 'default', `${uuid}-${projectData.name}`);
+              await mkdir(storyDir);          
+              router.push(`/project?profile=${profile}&id=${uuid}`);
+            }
+          });
+      }
+    } else {
+      console.log("No profile name");
+    }
+  };
 
   // Handle file selection and preview the avatar
   const handleCharacterImageFileChange = (
@@ -147,21 +180,18 @@ export default function CreateProject() {
             <div className="flex flex-row gap-8 w-full">
               <h3 className="text-4xl font-medium">Create a new project</h3>
               <Button
-              color="primary"
-              variant="flat"
-              className="mb-4 self-start"
-              onPress={() => null}
-            >
-              <Sparkle/>
-              Get ideas
-            </Button>
+                color="primary"
+                variant="flat"
+                className="mb-4 self-start"
+                onPress={() => null}
+              >
+                <Sparkle />
+                Get ideas
+              </Button>
             </div>
             <Form
               className="flex flex-col space-y-6 w-full"
-              onSubmit={(event) => {
-                event.preventDefault();
-                let data = "";
-              }}
+              onSubmit={(event) => {}}
             >
               {/* Project Name */}
               <h4 className="text-2xl font-medium">Project Name</h4>
@@ -275,21 +305,21 @@ export default function CreateProject() {
                 </Button>
               </div>
               <div className="w-6/12 min-h-44 grid grid-flow-col justify-around overflow-x-scroll space-x-8 p-8 bg-default-100 rounded-lg">
-                {projectExtras.characters && 
-                    projectExtras.characters.map((character, key) => (
-                      <CharacterCard
-                        name={character.name}
-                        gender={character.gender}
-                        age={character.age}
-                        role={character.role}
-                        background={character.background}
-                        personality={character.personality}
-                        image={character.image}
-                        key={key}
-                      ></CharacterCard>
-                    ))}
+                {projectExtras.characters &&
+                  projectExtras.characters.map((character, key) => (
+                    <CharacterCard
+                      name={character.name}
+                      gender={character.gender}
+                      age={character.age}
+                      role={character.role}
+                      background={character.background}
+                      personality={character.personality}
+                      image={character.image}
+                      key={key}
+                    ></CharacterCard>
+                  ))}
                 <div className="">
-                  {!projectExtras.characters && "No characters" }
+                  {!projectExtras.characters && "No characters"}
                   <Modal
                     isOpen={isOpen}
                     onOpenChange={onOpenChange}

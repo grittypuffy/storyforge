@@ -13,6 +13,8 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import inputStyles from "@/utils/input/styles";
 import { load } from "@tauri-apps/plugin-store";
+import { path } from "@tauri-apps/api";
+import { mkdir } from "@tauri-apps/plugin-fs";
 
 export default function Landing() {
   const [avatar, setAvatar] = useState("/avatar.png"); // Default image path
@@ -39,10 +41,7 @@ export default function Landing() {
         "SELECT profile_name from profile where profile_name = $1",
         [profileName]
       );
-      if (queryResult.length !== 0) {
-        console.log(queryResult);
-        console.log(queryResult.length);
-      } else {
+      if (queryResult.length === 0) {
         let uuid = uuidv4();
         await db
           .execute(
@@ -51,9 +50,17 @@ export default function Landing() {
           )
           .then(async (queryResult) => {
             if (queryResult) {
+              let homeDir = await path.homeDir();
+              let profileDir = await path.join(homeDir, 'storyforge', profileName);
+              await mkdir(profileDir);                            
+
               const store = await load("settings.json", { autoSave: true });
               // Set a value.
-              await store.set("profile", { profile_name: profileName, avatar: avatar, id: uuid });
+              await store.set("profile", {
+                profile_name: profileName,
+                avatar: avatar,
+                id: uuid,
+              });
               router.push(`/dashboard?profile=${profileName}`);
             }
           });
@@ -72,7 +79,7 @@ export default function Landing() {
             <span className="ml-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-green-500">
               StoryForge
             </span>
-            <Sparkle/>
+            <Sparkle />
           </h1>
           <h3 className="text-2xl font-medium">
             Create a profile to get started
