@@ -11,6 +11,10 @@
     "sql:default",
     "sql:allow-execute",
     "store:default",
-    "store:default"
+    "fs:default",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$HOME/storyforge/*" }]
+    }
   ]
 }

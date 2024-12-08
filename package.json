@@ -12,6 +12,7 @@
     "@nextui-org/react": "^2.6.4",
     "@svgr/webpack": "^8.1.0",
     "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-shell": "~2.0.1",
     "@tauri-apps/plugin-sql": "~2.0.2",
     "@tauri-apps/plugin-store": "~2",
