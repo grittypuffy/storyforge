@@ -73,8 +73,8 @@ export default function Dashboard() {
   return (
     <Suspense fallback={null}>
       <>
-        <div className="grid items-start justify-items-start justify-center min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-          <main className="flex flex-row gap-2 row-start-1 items-end justify-end justify-items-end sm:items-start mb-4">
+        <div className="flex flex-col items-start justify-items-start min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+          <main className="flex flex-row gap-2 row-start-1 items-end justify-end justify-items-end sm:items-start mb-8">
             <h1 className="text-5xl">Welcome back, </h1>
             <Avatar
               showFallback
@@ -83,10 +83,10 @@ export default function Dashboard() {
             />
             <h3 className="text-4xl">{profileName}</h3>
           </main>
-          <div className="grid gap-16">
-            <div className="flex justify-between items-center">
-              <h1 className="text-4xl font-bold">Your Projects</h1>
-              <Link href="../project/create">
+          <div className="grid grid-rows-4 gap-16 row-start-2">
+            <div className="flex min-w-80 items-center justify-items-stretch justify-around space-x-96">
+              <h1 className="text-4xl font-bold mr-96">Your Projects</h1>
+              <Link href="../project/create" className="ml-48">
                 <Button color="primary" variant="bordered">
                   Create New Project
                 </Button>
@@ -94,7 +94,7 @@ export default function Dashboard() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
+              {projects.length !== 0 ? "No projects" : projects.map((project, index) => (
                 <ProjectCard key={index} {...project} />
               ))}
             </div>

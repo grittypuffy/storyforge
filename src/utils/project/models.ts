@@ -25,3 +25,14 @@ export interface Character {
     image?: string
 }
 
+export interface ProjectModel {
+    id: string,
+    profile_id: string,
+    name: string,
+    genre?: string,
+    category: "Novel" | "Children's Book",
+    deadline?: string,
+    created_at: string,
+    recently_updated: string,
+    synopsis?: string
+}

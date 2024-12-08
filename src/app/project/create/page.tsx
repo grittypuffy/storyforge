@@ -18,15 +18,23 @@ import {
   SelectItem,
   useDisclosure,
   Form,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { mkdir, BaseDirectory, create, writeTextFile } from '@tauri-apps/plugin-fs';
+import {
+  mkdir,
+  BaseDirectory,
+  create,
+  writeTextFile,
+} from "@tauri-apps/plugin-fs";
 import { load } from "@tauri-apps/plugin-store";
 import Database from "@tauri-apps/plugin-sql";
-import * as path from '@tauri-apps/api/path';
+import * as path from "@tauri-apps/api/path";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -73,7 +81,6 @@ export default function CreateProject() {
     role: undefined,
     image: undefined,
   });
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [loading, setLoading] = useState(true);
@@ -83,26 +90,48 @@ export default function CreateProject() {
     const db = await Database.load("sqlite:storyforge.db");
     if (profile !== "") {
       let queryResult: Array<string> = await db.select(
-        "SELECT profile_id from profile where profile_name = $1",
+        "SELECT id from profile where profile_name = $1",
         [profile]
       );
       if (queryResult.length !== 0) {
+        console.log(queryResult);
+        console.log(projectData);
         await db
           .execute(
             "INSERT INTO project (id, profile_id, title, genre, category, deadline, created_at, recently_updated, synopsis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-            [uuid, queryResult[0], projectData.name, projectData.genre, projectData.category, projectData.deadline, projectData.created_at, projectData.recently_updated, projectData.synopsis]
+            [
+              uuid,
+              queryResult[0],
+              projectData.name,
+              projectData.genre,
+              projectData.category,
+              projectData.deadline,
+              projectData.created_at,
+              projectData.recently_updated,
+              projectData.synopsis,
+            ]
           )
           .then(async (queryResult) => {
             if (queryResult) {
               let homeDir = await path.homeDir();
-              let storyDir = await path.join(homeDir, 'storyforge', profile || 'default', `${uuid}-${projectData.name}`);
+              let storyDir = await path.join(
+                homeDir,
+                "storyforge",
+                profile || "default",
+                `${uuid}-${projectData.name}`
+              );
               await mkdir(storyDir);
-              let outlineFile = await path.join(storyDir, 'outline.md')
+              let outlineFile = await path.join(storyDir, "outline.md");
               await create(outlineFile);
+              console.log(projectExtras.outline || "");
               await writeTextFile(outlineFile, projectExtras.outline || "");
-              let charactersFile = await path.join(storyDir, 'characters.json')
+              let charactersFile = await path.join(storyDir, "characters.json");
               await create(charactersFile);
-              await writeTextFile(outlineFile, JSON.stringify(projectExtras.characters) || "{}");
+              console.log(JSON.stringify(projectExtras.characters) || "{}");
+              await writeTextFile(
+                charactersFile,
+                JSON.stringify(projectExtras.characters) || "{}"
+              );
               setProjectData({
                 id: uuid,
                 name: "",
@@ -201,19 +230,55 @@ export default function CreateProject() {
             </Button>
             <div className="flex flex-row gap-8 w-full">
               <h3 className="text-4xl font-medium">Create a new project</h3>
-              <Button
-                color="primary"
-                variant="flat"
-                className="mb-4 self-start"
-                onPress={() => null}
-              >
-                <Sparkle />
-                Get ideas
-              </Button>
+              <Popover showArrow offset={10} placement="bottom">
+                <PopoverTrigger>
+                  <Button
+                    color="primary"
+                    variant="flat"
+                    className="mb-4 self-start"
+                  >
+                    <Sparkle />
+                    Get ideas
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[240px]">
+                  {(titleProps) => (
+                    <div className="px-1 py-2 w-full">
+                      <p
+                        className="text-small font-bold text-foreground"
+                        {...titleProps}
+                      >
+                        Generate a story
+                      </p>
+                      <div className="mt-2 flex flex-col gap-2 w-full">
+                        <Input label="Name" size="sm" variant="bordered" />
+                        <Button
+                          color="primary"
+                          variant="flat"
+                          className="self-start w-full"
+                          onClick={async (event) => {
+                            const response = await fetch(
+                              "http://localhost:8000/project/suggestions"
+                            )
+                              .then((response) => {
+                                return response.json();
+                              })
+                              .then((body) => {
+                                setProjectData(body.projectData);
+                              });
+                          }}
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
             </div>
             <Form
               className="flex flex-col space-y-6 w-full"
-              onSubmit={(event) => {}}
+              onSubmit={createNewProject}
             >
               {/* Project Name */}
               <h4 className="text-2xl font-medium">Project Name</h4>

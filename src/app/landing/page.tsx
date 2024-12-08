@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import inputStyles from "@/utils/input/styles";
 import { load } from "@tauri-apps/plugin-store";
 import { path } from "@tauri-apps/api";
-import { mkdir } from "@tauri-apps/plugin-fs";
+import { exists, mkdir } from "@tauri-apps/plugin-fs";
 
 export default function Landing() {
   const [avatar, setAvatar] = useState("/avatar.png"); // Default image path
@@ -52,7 +52,10 @@ export default function Landing() {
             if (queryResult) {
               let homeDir = await path.homeDir();
               let profileDir = await path.join(homeDir, 'storyforge', profileName);
-              await mkdir(profileDir);                            
+              let exist = await exists(profileDir);
+              if (!exist){
+                await mkdir(profileDir).catch((error) => console.log(error));                            
+              }
 
               const store = await load("settings.json", { autoSave: true });
               // Set a value.

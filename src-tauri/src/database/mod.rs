@@ -20,12 +20,11 @@ pub fn migrate() -> Vec<Migration> {
                 profile_id TEXT,
                 title TEXT NOT NULL,
                 genre TEXT,
-                category TEXT CHECK (category IN ('Novel', 'Children''s Book')),
+                category TEXT,
                 deadline DATE,
                 created_at DATE NOT NULL,
                 recently_updated DATE NOT NULL,
-                synopsis TEXT,
-                FOREIGN KEY (profile_id) REFERENCES Profile(id)  -- Foreign key constraint
+                synopsis TEXT
             );"#,
         kind: MigrationKind::Up,
     };
