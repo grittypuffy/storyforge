@@ -1,13 +1,6 @@
 # service to generate some story line suggestions for the users
 
-# importing necessary libraries
-from transformers import AutoTokenizer
-from optimum.intel.openvino import OVModelForCausalLM
-
-# model id for the text generation model
-model_id = "OpenVINO/Phi-3-mini-128k-instruct-int8-ov"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = OVModelForCausalLM.from_pretrained(model_id)
+from services.textmodel import tokenizer, model
 
 # function to generate some story line suggestions for the users
 # genre: str, genre for which story line suggestions are to be generated
