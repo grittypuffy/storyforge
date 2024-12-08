@@ -31,7 +31,7 @@ export default function ProjectCard({
         <h4 className="font-bold text-lg text-default-800">{projectName}</h4>
         <div className="flex items-center mt-2">
           {typeIcons[projectType]} {/* Render icon based on caption */}
-          <p className="text-xs uppercase font-semibold text-default-500">
+          <p className="text-xs font-semibold text-default-500">
             {caption}
           </p>
         </div>

@@ -11,8 +11,10 @@
   "dependencies": {
     "@nextui-org/react": "^2.6.4",
     "@svgr/webpack": "^8.1.0",
+    "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/plugin-shell": "~2.0.1",
     "@tauri-apps/plugin-sql": "~2.0.2",
+    "@tauri-apps/plugin-store": "~2",
     "@types/react-svg": "^5.0.0",
     "framer-motion": "^11.13.1",
     "lucide-react": "^0.468.0",
@@ -23,13 +25,14 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20.17.9",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.0.4",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.0.4"
+    "typescript": "^5.7.2"
   }
 }
