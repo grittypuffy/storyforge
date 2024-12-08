@@ -62,9 +62,11 @@ export default function Project() {
           }}
         >
           <h3 style={{ margin: 0 }}>Chapters</h3>
+          <Link href="/project/story">
           <Button size="sm" color="secondary">
             Create New Chapter
           </Button>
+          </Link>
         </div>
         <div
           style={{
