@@ -117,6 +117,18 @@ Intel's specialized AI hardware allowed a paradigm shift from cloud-dependent to
 
 ## Features
 
+1. **Multiple Project Creation:** Users can create and manage multiple writing projects simultaneously. Each project includes customizable outlines, character descriptions, and AI-generated suggestions to help guide the development of the story.
+
+2. **AI-Assisted Writing:** StoryForge incorporates AI features that provide intelligent suggestions, plot ideas, character traits, and dialogues, aiding writers in refining their stories. These AI suggestions help to overcome writer’s block and improve the overall narrative flow.
+
+3. **Project  Management:** StoryForge includes a built-in deadline management system, allowing users to set specific timelines for their projects. Writers can track progress, set milestones, and manage their writing schedule effectively to meet deadlines.
+
+4. **Open standards for story creation:** StoryForge uses open standards like Markdown, allowing writers to create and structure their stories in a flexible, easy-to-use format. Markdown ensures that formatting remains clean and consistent across different platforms.
+
+5. **Export to EPUB:** Writers can easily export their completed projects into Epub format, ensuring compatibility with e-readers and making it easy to share or publish stories digitally.
+
+6. **Offline Functionality:** As an offline tool, StoryForge ensures complete privacy and security of users' work, without the need for internet connectivity, making it ideal for writers who value discretion and offline work environments.
+
 ### Text Generation
 Powered by OpenVINO and models like Phi-3-mini-128k-instruct-int8-ov, the tool excels in generating text that aligns with the writer’s style and story context.
 
