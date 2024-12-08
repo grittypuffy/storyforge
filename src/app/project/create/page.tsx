@@ -44,8 +44,10 @@ import {
 export default function CreateProject() {
   const router = useRouter();
   const today = new Date();
+  let uuid = uuidv4();
   const [profile, setProfile] = useState<string | null>("");
   const [projectData, setProjectData] = useState<ProjectDetails>({
+    id: uuid,
     name: "",
     genre: undefined,
     category: "Novel",
@@ -85,7 +87,6 @@ export default function CreateProject() {
         [profile]
       );
       if (queryResult.length !== 0) {
-        let uuid = uuidv4();
         await db
           .execute(
             "INSERT INTO project (id, profile_id, title, genre, category, deadline, created_at, recently_updated, synopsis) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
@@ -103,6 +104,7 @@ export default function CreateProject() {
               await create(charactersFile);
               await writeTextFile(outlineFile, JSON.stringify(projectExtras.characters) || "{}");
               setProjectData({
+                id: uuid,
                 name: "",
                 genre: undefined,
                 category: "Novel",

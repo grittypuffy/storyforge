@@ -1,4 +1,5 @@
 export interface ProjectDetails {
+    id: string,
     name: string,
     genre?: string,
     category: "Novel" | "Children's Book",
@@ -23,3 +24,4 @@ export interface Character {
     role?: string,
     image?: string
 }
+

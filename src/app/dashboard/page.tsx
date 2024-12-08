@@ -105,14 +105,7 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* Example favorite card */}
-              <ProjectCard
-                projectName="Favorite Project"
-                caption="Novel"
-                lastUpdated="2024-12-05"
-                synopsis="This is a short description of the featured project."
-                imageUrl="https://via.placeholder.com/270x150"
-                projectType="Novel"
-              />
+              No favourites
             </div>
           </div>
         </div>
