@@ -1,143 +1,65 @@
-"use client";
+"use client"
+import { useState } from "react";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
+import remarkRehype from "remark-rehype";
+import rehypeRaw from "rehype-raw";
+import rehypeStringify from "rehype-stringify";
 
-import { Button, Card, Badge, Accordion, AccordionItem, Listbox, ListboxItem } from "@nextui-org/react";
-import Link from "next/link";
-import React, { ReactNode, useState } from "react";
+export default function MarkdownEditor() {
+  const [markdownContent, setMarkdownContent] = useState("");
+  const [previewContent, setPreviewContent] = useState("");
+  const [isPreview, setIsPreview] = useState(false);
 
-// Wrapper for Listbox component
-const ListboxWrapper = ({ children }: { children: ReactNode }) => (
-  <div className="w-full max-w-[260px] border-small px-1 py-2 rounded-small border-default-200 dark:border-default-100">
-    {children}
-  </div>
-);
+  const handlePreview = async () => {
+    try {
+      const parsedMarkdown = await unified()
+        .use(remarkParse) // Parse Markdown
+        .use(remarkGfm) // Support GitHub Flavored Markdown
+        .use(remarkRehype, { allowDangerousHtml: true }) // Convert to HTML AST
+        .use(rehypeRaw) // Parse raw HTML within Markdown
+        .use(rehypeStringify) // Convert HTML AST to HTML string
+        .process(markdownContent);
 
-export default function Project() {
-  const items = [
-    { key: "idea 1", label: "Idea A" },
-    { key: "idea 2", label: "Idea B" },
-    { key: "idea 3", label: "Idea C" },
-    { key: "idea 4", label: "Idea D" },
-  ];
+      setPreviewContent(String(parsedMarkdown));
+      setIsPreview(true);
+    } catch (error) {
+      console.error("Error processing markdown:", error);
+    }
+  };
 
   return (
-    <div style={{ padding: "40px", backgroundColor: "#000000", minHeight: "100vh" }}>
-      {/* Header */}
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-        <h1 style={{ margin: 0 }}>Project Name</h1>
-        <Link href="/project/create">
-          <Button color="primary">Back to Project</Button>
-        </Link>
-      </header>
+    <div className="flex flex-col items-center min-h-screen bg-gray-50 p-6">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Markdown Editor</h1>
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Input Section */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Write Markdown</h2>
+          <textarea
+            className="w-full h-80 p-4 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 resize-none bg-white text-gray-800"
+            value={markdownContent}
+            onChange={(e) => setMarkdownContent(e.target.value)}
+            placeholder="Type your markdown here..."
+          />
+        </div>
 
-      {/* Metadata Section */}
-      <section
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          alignItems: "center",
-          marginBottom: "30px",
-        }}
+        {/* Preview Section */}
+        <div>
+          <h2 className="text-lg font-semibold text-gray-700 mb-2">Preview</h2>
+          <div
+            className="w-full h-80 p-4 border rounded-md shadow-sm bg-white text-gray-800 overflow-y-auto prose prose-blue"
+            dangerouslySetInnerHTML={{ __html: previewContent }}
+          />
+        </div>
+      </div>
+
+      <button
+        onClick={handlePreview}
+        className="mt-6 px-6 py-3 bg-blue-500 text-white font-medium rounded-md shadow-md hover:bg-blue-600 transition duration-300"
       >
-        <Badge variant="flat">Category: Children’s Book</Badge>
-        <Badge variant="flat">Genre: Fiction</Badge>
-        <Badge variant="flat">Deadline: Dec 15, 2023</Badge>
-        <Badge variant="flat">Recently Updated</Badge>
-      </section>
-
-      {/* Description */}
-      <section style={{ marginBottom: "40px" }}>
-        <h3>Description</h3>
-        <p>Some description about the project.</p>
-      </section>
-
-      {/* Chapters Section */}
-      <section style={{ marginBottom: "40px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <h3 style={{ margin: 0 }}>Chapters</h3>
-          <Button size="sm" color="secondary">
-            Create New Chapter
-          </Button>
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "20px",
-            justifyContent: "center",
-          }}
-        >
-          {[1, 2, 3, 4].map((chapter) => (
-            <Card
-              key={chapter}
-              isHoverable
-              isPressable
-              style={{
-                width: "180px",
-                height: "180px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                borderRadius: "12px",
-                transition: "box-shadow 0.3s ease",
-              }}
-            >
-              <h4 style={{ margin: 0, fontSize: "18px" }}>Chapter {chapter}</h4>
-              <h4 style={{ marginTop: "10px", fontSize: "14px", color: "#888" }}>Text about the chapter...</h4>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Outline Section */}
-      <section style={{ marginBottom: "40px" }}>
-        <Accordion>
-          <AccordionItem key="outline" aria-label="Outline" title="Outline">
-            <div style={{ padding: "10px" }}>
-              <p>
-                This section contains a detailed outline of the project. You can write long-form descriptions or plans
-                here.
-              </p>
-            </div>
-          </AccordionItem>
-          <AccordionItem key="ideas" aria-label="Ideas" title="Ideas">
-            <div style={{ padding: "10px" }}>
-              <ListboxWrapper>
-                <Listbox aria-label="Ideas List" items={items}>
-                  {(item) => (
-                    <ListboxItem
-                      key={item.key}
-                      className={item.key === "delete" ? "text-danger" : ""}
-                      color={item.key === "delete" ? "danger" : "default"}
-                    >
-                      {item.label}
-                    </ListboxItem>
-                  )}
-                </Listbox>
-              </ListboxWrapper>
-            </div>
-          </AccordionItem>
-        </Accordion>
-      </section>
-
-      {/* Link to Dashboard */}
-      <footer style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
-        <Link href="/dashboard">
-          <Button color="primary" size="lg">
-            Submit
-          </Button>
-        </Link>
-      </footer>
+        Generate Preview
+      </button>
     </div>
   );
 }
