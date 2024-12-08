@@ -10,8 +10,13 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  reactStrictMode: true,
+  images: {
+    unoptimized: true,
+  },
   /* config options here */
   output: "export",
+  distDir: "./dist",
 };
 
 export default nextConfig;
