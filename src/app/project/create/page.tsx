@@ -23,7 +23,7 @@ import {
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { mkdir, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { mkdir, BaseDirectory, create, writeTextFile } from '@tauri-apps/plugin-fs';
 import { load } from "@tauri-apps/plugin-store";
 import Database from "@tauri-apps/plugin-sql";
 import * as path from '@tauri-apps/api/path';
@@ -95,8 +95,28 @@ export default function CreateProject() {
             if (queryResult) {
               let homeDir = await path.homeDir();
               let storyDir = await path.join(homeDir, 'storyforge', profile || 'default', `${uuid}-${projectData.name}`);
-              await mkdir(storyDir);          
-              router.push(`/project?profile=${profile}&id=${uuid}`);
+              await mkdir(storyDir);
+              let outlineFile = await path.join(storyDir, 'outline.md')
+              await create(outlineFile);
+              await writeTextFile(outlineFile, projectExtras.outline || "");
+              let charactersFile = await path.join(storyDir, 'characters.json')
+              await create(charactersFile);
+              await writeTextFile(outlineFile, JSON.stringify(projectExtras.characters) || "{}");
+              setProjectData({
+                name: "",
+                genre: undefined,
+                category: "Novel",
+                deadline: undefined,
+                created_at: today.toISOString(),
+                recently_updated: today.toISOString(),
+                synopsis: undefined,
+              });
+              setProjectExtras({
+                outline: undefined,
+                characters: undefined,
+                images: undefined,
+              });
+              router.push(`/project?id=${uuid}`);
             }
           });
       }
