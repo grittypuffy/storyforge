@@ -10,8 +10,11 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-  /* config options here */
-  output: "export",
+  reactStrictMode: true,
+  images: {
+    unoptimized: true,
+  },
+  output: 'export',
 };
 
 export default nextConfig;

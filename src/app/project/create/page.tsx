@@ -1,13 +1,16 @@
 "use client";
 
-import { Input, Textarea } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Baby, BookMarked } from "lucide-react";
-import { useState } from "react";
 
 import inputStyles from "@/utils/input/styles";
 import {
+  Button,
+  Input,
+  Textarea,
   Image,
   DatePicker,
   Modal,
@@ -21,13 +24,25 @@ import {
   SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
+
 import genres from "@/utils/project/genres";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import {Character, Project} from "@/utils/project/models";
+
 
 export default function Landing() {
   const router = useRouter();
-
+  const today = new Date();
+  const [projectData, setProjectData] = useState<Project>({
+    name: "",
+    genre: undefined,
+    category: "Novel",
+    deadline: undefined,
+    created_at: today.toISOString(),
+    recently_updated: today.toISOString(),
+    synopsis: undefined,
+    outline: undefined,
+    characters: []
+  });
   const [projectName, setProjectName] = useState("");
   const [genre, setGenre] = useState("");
   const [type, setType] = useState("");
@@ -38,6 +53,15 @@ export default function Landing() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Character details
+  const [characterData, setCharacterData] = useState<Character>({
+    name: undefined,
+    personality: undefined,
+    background: undefined,
+    gender: undefined,
+    age: undefined,
+    role: undefined
+  });
+
   const [characterName, setCharacterName] = useState("");
   const [characterDescription, setCharacterDescription] = useState("");
   const [characterGender, setCharacterGender] = useState("");
