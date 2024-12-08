@@ -9,6 +9,8 @@
     "core:default",
     "shell:default",
     "sql:default",
-    "sql:allow-execute"
+    "sql:allow-execute",
+    "store:default",
+    "store:default"
   ]
 }

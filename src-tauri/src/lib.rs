@@ -8,6 +8,7 @@ pub fn run() {
                 .add_migrations("sqlite:storyforge.db", migrations)
                 .build(),
         )
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
             if cfg!(debug_assertions) {

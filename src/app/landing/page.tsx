@@ -12,6 +12,7 @@ import { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
 import inputStyles from "@/utils/input/styles";
+import { load } from "@tauri-apps/plugin-store";
 
 export default function Landing() {
   const [avatar, setAvatar] = useState("/avatar.png"); // Default image path
@@ -48,9 +49,12 @@ export default function Landing() {
             "INSERT INTO profile (id, profile_name, avatar) VALUES ($1, $2, $3)",
             [uuid, profileName, avatar]
           )
-          .then((queryResult) => {
+          .then(async (queryResult) => {
             if (queryResult) {
-              router.push("/dashboard");
+              const store = await load("settings.json", { autoSave: true });
+              // Set a value.
+              await store.set("profile", { profile_name: profileName, avatar: avatar, id: uuid });
+              router.push(`/dashboard?profile=${profileName}`);
             }
           });
       }

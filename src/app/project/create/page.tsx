@@ -240,11 +240,9 @@ export default function Landing() {
 
             {/* Submit Button */}
             <Link href="../project">
-            <Button
-              color="primary"
-              className="mt-8 w-6/12">
-              Create
-            </Button>
+              <Button color="primary" className="mt-8 w-6/12">
+                Create
+              </Button>
             </Link>
           </form>
         </main>
