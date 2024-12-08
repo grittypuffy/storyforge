@@ -1,13 +1,6 @@
 # service to suggest names for the characters in the story
 
-# importing necessary libraries
-from transformers import AutoTokenizer
-from optimum.intel.openvino import OVModelForCausalLM
-
-# model id for the text generation model
-model_id = "OpenVINO/Phi-3-mini-128k-instruct-int8-ov"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = OVModelForCausalLM.from_pretrained(model_id)
+from services.textmodel import tokenizer, model
 
 # function to suggest names for the characters in the story
 # character_count: int, number of characters for which names are to be suggested
