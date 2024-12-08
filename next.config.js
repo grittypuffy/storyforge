@@ -1,6 +1,8 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+//import type { NextConfig } from "next";
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   webpack(config) {
     // Adding SVGR for importing SVG files as React components
     config.module.rules.push({
@@ -14,9 +16,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  /* config options here */
-  output: "export",
-  distDir: "./dist",
+  output: 'export',
 };
 
-export default nextConfig;
+module.exports = nextConfig;

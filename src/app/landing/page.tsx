@@ -34,7 +34,7 @@ export default function Landing() {
   const createProfile = async (event: any) => {
     event.preventDefault();
     const db = await Database.load("sqlite:storyforge.db");
-    if (profileName) {
+    if (profileName !== "") {
       let queryResult: Array<string> = await db.select(
         "SELECT profile_name from profile where profile_name = $1",
         [profileName]
