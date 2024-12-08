@@ -167,7 +167,7 @@ The project is structured as a monorepository with the following folders:
 Ensure you have the following dependencies installed on your system:
 
 1. [Bun](https://bun.sh): Performant JavaScript runtime, bundler and dependency manager used for the frontend.
-2. [Rust](https://www.rust-lang.org): Used for building cross-platform desktop application with Tauri. Install it via [`rustup`](https://www.rust-lang.org/learn/get-started)
+2. [Rust](https://www.rust-lang.org): Used for building cross-platform desktop application with Tauri. Install it via [`rustup`](https://www.rust-lang.org/learn/get-started). Install Tauri CLI using cargo via `cargo install tauri-cli`
 3. [Poetry](https://python-poetry.org/): Packaging and dependency manager for Python, used for the FastAPI backend. It is assumed that you have Python installed on your system.
 
 ## Building the project
