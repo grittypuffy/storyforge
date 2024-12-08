@@ -1,6 +1,6 @@
 <div style="text-align: center;">
-<dic style=" display: flex; flex-direction: row; justify-items: center; align-items: center;">
-    <img src="./assets/HE_logo.png" height="150" width="400" alt="HackerEarth Logo" style="background-color: white;" />
+<div style=" display: flex; flex-direction: row; justify-items: center; align-items: center;">
+    <img src="./assets/HE_logo.png" height="150" width="300" alt="HackerEarth Logo" style="background-color: white;" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <img src="https://www.intel.com/content/dam/www/central-libraries/us/en/images/intel-new-logo-16x9.jpg" height="150" width="300" alt="Intel Logo" />
 </div>
@@ -28,6 +28,20 @@ Generating Images – character images based on description, cover image based o
 
 # Table of Contents
 
+| **#** | **Section**                          |
+|-------|--------------------------------------|
+| 1     | [Problem Statement](#problem-statement) |
+| 2     | [Solution Proposed](#solution-proposed) |
+| 3     | [Architecture Diagram](#architecture-diagram) |
+| 4     | [Technology Behind StoryForge](#technology-behind-storyforge) |
+| 5     | [Features](#features)                |
+| 6     | [Core Services](#core-services)      |
+| 7     | [Development](#development)          |
+| 8     | [Novelty](#novelty)                  |
+| 9     | [Team](#team)                        |
+| 10    | [Contributing](#contributing)        |
+
+
 ## Problem Statement
 
 Writing a novel is a time-intensive, creative process that can overwhelm even seasoned writers.
@@ -49,73 +63,82 @@ StoryForge is a client-side desktop application that leverages Intel® AI PC’s
 
 <div><img src="./assets/architecture.png" alt="StoryForge Architecture"></div>
 
-## Technologies Used
+## Technology Behind StoryForge
 
-### **Optimum Intel**
+StoryForge combines state-of-the-art hardware and software innovations to deliver an exceptional user experience:
 
-Optimum Intel is a Python library that is specifically designed to enhance the speed and efficiency of AI workloads on Intel hardware. It optimizes the performance of AI models, particularly for tasks related to text and image generation. By integrating with popular libraries like diffusers and transformers, it facilitates the deployment of AI models directly on end-devices, ensuring that users can leverage powerful hardware capabilities for faster processing, even in resource-constrained environments.
+### Optimum Intel: Supercharging AI Workloads
 
-### **Intel OpenVINO**
+Optimum Intel emerged as a critical library in our text and image generation projects. By fine-tuning AI model performance on Intel hardware, we dramatically reduced processing times for complex generative tasks. The library ensured our models ran efficiently, even on modest hardware configurations, enabling faster inference for product descriptions and creative artwork generation.
 
-Intel OpenVINO (Open Visual Inference and Neural Network Optimization) is an open-source toolkit that aims to optimize and deploy deep learning models. It is designed to maximize the performance of models on Intel hardware, enabling efficient inference, improved execution times, and optimized use of system resources. By supporting a wide range of AI models, OpenVINO helps in enhancing the productivity of AI tasks across various applications such as image recognition, object detection, and more.
+### Intel OpenVINO: Unleashing Hardware Potential
 
-### **Python**
+OpenVINO transformed our approach to model deployment. During our conversational AI project, we leveraged its optimization toolkit to run large language models more efficiently. The result was faster inference times and reduced computational overhead, making our AI assistant responsive and resource-friendly across different hardware environments.
 
-Python is a versatile, high-level programming language that is widely used for backend development in a variety of projects, including AI and machine learning applications. In this context, Python serves as the core language for handling API requests and interacting with AI models. It simplifies tasks related to data processing, model deployment, and communication with other components, making it an ideal choice for powering both text and image generation processes in the system.
+### Python: The Backbone of Our AI Ecosystem
 
-### **FastAPI**
+Python served as more than just a programming language—it was our universal translator between AI models, APIs, and user interfaces. In our recommendation engine, Python seamlessly integrated Hugging Face models, handled complex data transformations, and orchestrated the entire machine learning pipeline with remarkable flexibility.
 
-FastAPI is a modern, high-performance web framework for building APIs in Python. It is designed to be fast, easy to use, and highly compatible with asynchronous programming. FastAPI powers the backend of the application, managing the flow of data between the client-side and AI models. It enables quick development of APIs with built-in validation, automatic interactive documentation, and support for asynchronous requests, ensuring efficient operation of text and image generation tasks.
+### FastAPI: Rapid API Development
 
-### **Poetry**
+When building our real-time image generation service, FastAPI proved instrumental. Its asynchronous capabilities allowed handling multiple generation requests simultaneously, creating a smooth, responsive backend that could scale effortlessly. The automatic documentation feature significantly simplified integration for frontend developers.
 
-Poetry is a dependency management tool for Python that helps developers manage and maintain the libraries and packages needed for a project. It simplifies package installation, version control, and environment consistency, ensuring that all dependencies are up-to-date and compatible. Poetry also facilitates the creation of isolated environments for projects, making it easier to maintain different configurations for development, testing, and production.
+### Poetry: Dependency Management Simplified
 
-### **Tauri**
+Poetry eliminated the complexities of dependency management. It ensured consistent environments across development, staging, and production stages. This was crucial in our multi-model machine learning platform, where library compatibility could determine the entire system's success.
 
-Tauri is a cross-platform framework for building lightweight, secure, and efficient desktop applications using web technologies like HTML, CSS, and JavaScript. It ensures a small application bundle size while providing offline functionality and privacy. Tauri is often used alongside Rust to handle system-level tasks that require enhanced performance. This combination allows developers to create secure and performant applications while maintaining a native feel on Windows, macOS, and Linux.
+### Tauri & Rust: Performance Meets Security
 
-### **Rust**
+Our desktop AI tool required more than standard web technologies. Tauri and Rust provided a lightweight, secure framework capable of handling intensive AI computations. Rust's memory safety guaranteed a robust application without compromising performance, enabling complex AI tasks to run smoothly.
 
-Rust is a systems programming language known for its memory safety, performance, and concurrency. It is often used to build fast and reliable system-level components, making it a perfect fit for high-performance applications. In this project, Rust works alongside Tauri to implement performance-critical tasks that require low-level system interactions. Its ability to handle concurrency and prevent memory errors makes it a preferred choice for ensuring the reliability and efficiency of the application.
+### Next.js: Crafting Interactive AI Interfaces
 
-### **Cargo**
+Next.js transformed our frontend development approach. Server-side rendering allowed us to build SEO-friendly interfaces for our AI-powered content generation platform. The framework ensured fast load times and smooth user interactions, critical for engaging AI-driven experiences.
 
-Cargo is the Rust programming language’s package manager and build system. It is responsible for managing Rust project dependencies, compiling code, and running tests. Cargo simplifies the process of building and distributing Rust applications by automating many tasks, such as downloading necessary libraries and compiling source code into executable binaries. It streamlines the development process by ensuring that Rust projects remain organized and manageable.
+### Tailwind CSS: Rapid UI Development
 
-### **Next.js**
+Tailwind CSS revolutionized our design workflow. In our AI assistant's interface, we could prototype and iterate design concepts at unprecedented speeds. Utility-first classes enabled consistent styling across complex, dynamic components without extensive custom CSS development.
 
-Next.js is a React-based framework used for building web applications that are fast, SEO-friendly, and optimized for performance. It offers built-in server-side rendering (SSR) and static site generation (SSG), enabling developers to create highly responsive and search-engine optimized applications. In this project, Next.js is used for building the frontend of the application, ensuring that users can interact with the AI models through a seamless and engaging web interface.
+### Hugging Face: Pre-trained Model Magic
 
-### **JavaScript**
+Hugging Face became our primary source for pre-trained models. Whether handling sentiment analysis, text generation, or translation, their models dramatically reduced development time. Integration with Intel OpenVINO further enhanced model performance and efficiency.
 
-JavaScript is a dynamic programming language that runs in the browser and enables interactive features in web applications. It works alongside Next.js to power the frontend, managing user interactions, form submissions, and real-time updates. JavaScript is also used for handling client-side logic, such as managing dynamic content updates or integrating third-party APIs, providing a smooth and responsive user experience.
+### SQLite: Lightweight Local Storage
 
-### **Bun**
+For our offline-first AI tools, SQLite provided an ideal data storage solution. User preferences, generation history, and model configurations were stored locally, ensuring data privacy and enabling seamless offline experiences across different device configurations.
 
-Bun is a fast JavaScript runtime that replaces traditional bundlers and package managers like Webpack or npm. It offers improved performance during the development process by reducing the overhead associated with bundling and package management. Bun is used in this project to optimize the workflow, enhancing build times and enabling faster application development, particularly for JavaScript code.
+### Intel® AI PC: Local AI Powerhouse
 
-### **Tailwind CSS**
-
-Tailwind CSS is a utility-first CSS framework that enables rapid UI development by providing a comprehensive set of pre-defined utility classes. These classes allow developers to style HTML elements quickly and efficiently without writing custom CSS. Tailwind promotes a highly customizable and responsive design system, making it easier to build modern, attractive user interfaces while ensuring consistency across the application.
-
-### **Hugging Face**
-
-Hugging Face is a leading platform and library for natural language processing (NLP) and machine learning models. It provides a large collection of pre-trained models that can be easily integrated into various applications. In this project, Hugging Face’s models are used for tasks such as text generation and processing. The platform also supports integration with Intel OpenVINO, allowing for optimized performance during inference tasks.
-
-### **SQLite**
-
-SQLite is a lightweight, serverless database engine that stores data in a single file. It is commonly used for local data storage in applications where a full-fledged database server is not necessary. In this project, SQLite is used to store user profiles, preferences, and generated content, ensuring that the data is accessible offline and can be easily managed on users' devices.
-
-### **Intel® AI PC**
-
-Intel® AI PCs are specialized hardware devices built to handle intensive AI workloads efficiently. These systems are equipped with high-performance CPUs, GPUs, and AI accelerators designed to run complex algorithms and models locally, without relying on cloud infrastructure. By leveraging Intel’s hardware, the system ensures that AI-driven tasks, such as text and image generation, run faster and more efficiently, even in offline or low-connectivity environments.
-
+Intel's specialized AI hardware allowed a paradigm shift from cloud-dependent to local AI processing. Our text and image generation tools could now run entirely on-device, providing faster, more private AI experiences without constant internet connectivity and reducing latency in critical applications.
 <div style="text-align: center;">
   <img src="./assets/techstack.png" alt="Tech Stack">
 </div>
 </br>
 
+## Features
+
+### Text Generation
+Powered by OpenVINO and models like Phi-3-mini-128k-instruct-int8-ov, the tool excels in generating text that aligns with the writer’s style and story context.
+
+### Image Generation
+Using the LCM_Dreamshaper_v7-int8-ov model, StoryForge creates high-quality illustrations for characters, covers, and scenes, enhancing storytelling with vivid visuals.
+
+## Core Services
+
+| **Feature**             | **Functionality**                                                                 |
+|--------------------------|-----------------------------------------------------------------------------------|
+| Character Descriptions   | Helps define personalities and appearances for immersive character building.      |
+| Character Images         | Generates visuals to match written character profiles.                           |
+| Character Names          | Suggests names that fit the story’s tone and genre.                              |
+| Cover Images             | Creates eye-catching designs based on the book’s synopsis.                       |
+| Story Outlines           | Assists in planning the narrative structure.                                     |
+| Story Suggestions        | Proposes ideas to keep the narrative engaging and coherent.                      |
+| Synopses                 | Summarizes the plot to pitch to publishers or readers.                           |
+| Title Generation         | Suggests compelling titles for novels.                                           |
+| Chapter Suggestions      | Offers ideas to expand or refine story progression.                              |
+| Story Reconstruction     | Revamps content for improved readability and alignment with the writer’s intent. |
+
+---
 # Development
 
 ## Structure
