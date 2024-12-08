@@ -23,11 +23,11 @@ import {
   Select,
   SelectItem,
   useDisclosure,
+  Form,
 } from "@nextui-org/react";
 
 import genres from "@/utils/project/genres";
-import {Character, Project} from "@/utils/project/models";
-
+import { Character, Project, ProjectExtras } from "@/utils/project/models";
 
 export default function Landing() {
   const router = useRouter();
@@ -39,13 +39,15 @@ export default function Landing() {
     deadline: undefined,
     created_at: today.toISOString(),
     recently_updated: today.toISOString(),
-    synopsis: undefined,
-    outline: undefined,
-    characters: []
+    synopsis: undefined
   });
-  const [projectName, setProjectName] = useState("");
+
+  const [projectExtras, setProjectExtras] = useState<ProjectExtras>({
+    outline: undefined,
+    characters: undefined
+  });
+
   const [genre, setGenre] = useState("");
-  const [type, setType] = useState("");
   const [deadLine, setDeadLine] = useState<string | null>(null);
   const [synopsis, setSynopsis] = useState<string | null>(null);
   const [outline, setOutline] = useState<string | null>(null);
@@ -59,7 +61,8 @@ export default function Landing() {
     background: undefined,
     gender: undefined,
     age: undefined,
-    role: undefined
+    role: undefined,
+    images: undefined,
   });
 
   const [characterName, setCharacterName] = useState("");
@@ -83,31 +86,37 @@ export default function Landing() {
           </Button>
 
           <h3 className="text-4xl font-medium">Create a new project</h3>
-          <form className="flex flex-col space-y-6 w-full">
+          <Form
+            className="flex flex-col space-y-6 w-full"
+            onSubmit={(event) => {
+              event.preventDefault();
+              let data = Object.fromEntries(new FormData(event.currentTarget));
+            }}
+          >
             {/* Project Name */}
             <h4 className="text-2xl font-medium">Project Name</h4>
             <Input
               type="text"
               placeholder="Enter your project name"
               classNames={inputStyles}
+              name="name"
               className="w-3/12"
               isRequired
-              onChange={(event) => setProjectName(event.target.value)}
             />
 
             {/* Project Type */}
-            <h4 className="text-2xl font-medium">Project Type</h4>
+            <h4 className="text-2xl font-medium">Project Category</h4>
             <Select
               className="w-3/12"
               defaultSelectedKeys={["novel"]}
-              placeholder="Select project type"
+              placeholder="Select category"
               isRequired
-              onChange={(event) => setType(event.target.value)}
+              name="category"
             >
-              <SelectItem key="novel" startContent={<BookMarked />}>
+              <SelectItem key="novel" startContent={<BookMarked />} value={"Novel"}>
                 Novel
               </SelectItem>
-              <SelectItem key="childrens" startContent={<Baby />}>
+              <SelectItem key="childrens" startContent={<Baby />} value={"Children's Book"}>
                 Children's Book
               </SelectItem>
             </Select>
@@ -264,11 +273,11 @@ export default function Landing() {
 
             {/* Submit Button */}
             <Link href="../project">
-              <Button color="primary" className="mt-8 w-6/12">
+              <Button color="primary" className="mt-8 w-6/12" type="submit">
                 Create
               </Button>
             </Link>
-          </form>
+          </Form>
         </main>
       </div>
     </>

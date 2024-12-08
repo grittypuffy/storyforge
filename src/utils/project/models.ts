@@ -5,7 +5,10 @@ export interface Project {
     deadline?: string,
     created_at: string,
     recently_updated: string,
-    synopsis?: string,
+    synopsis?: string
+}
+
+export interface ProjectExtras {
     outline?: string,
     characters?: Character[]
 }
@@ -16,5 +19,6 @@ export interface Character {
     background?: string,
     gender?: "M" | "F" | "O",
     age?: number,
-    role?: string
+    role?: string,
+    images?: string[]
 }
