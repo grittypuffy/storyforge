@@ -1,4 +1,4 @@
-export interface Project {
+export interface ProjectDetails {
     name: string,
     genre?: string,
     category: "Novel" | "Children's Book",
@@ -10,7 +10,8 @@ export interface Project {
 
 export interface ProjectExtras {
     outline?: string,
-    characters?: Character[]
+    characters?: Character[],
+    images?: string[]
 }
 
 export interface Character {
@@ -20,5 +21,5 @@ export interface Character {
     gender?: "M" | "F" | "O",
     age?: number,
     role?: string,
-    images?: string[]
+    image?: string
 }

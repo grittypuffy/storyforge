@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import Sparkle from "@/../public/ai.svg";
 import { useRouter } from "next/navigation";
 
 import { Baby, BookMarked } from "lucide-react";
@@ -27,32 +28,34 @@ import {
 } from "@nextui-org/react";
 
 import genres from "@/utils/project/genres";
-import { Character, Project, ProjectExtras } from "@/utils/project/models";
+import {
+  Character,
+  ProjectDetails,
+  ProjectExtras,
+} from "@/utils/project/models";
+import { load } from "@tauri-apps/plugin-store";
+import { Profile } from "@/utils/profile/query";
+import CharacterCard from "@/components/character/Card";
 
-export default function Landing() {
+export default function CreateProject() {
   const router = useRouter();
   const today = new Date();
-  const [projectData, setProjectData] = useState<Project>({
+  const [profile, setProfile] = useState<string | null>("");
+  const [projectData, setProjectData] = useState<ProjectDetails>({
     name: "",
     genre: undefined,
     category: "Novel",
     deadline: undefined,
     created_at: today.toISOString(),
     recently_updated: today.toISOString(),
-    synopsis: undefined
+    synopsis: undefined,
   });
 
   const [projectExtras, setProjectExtras] = useState<ProjectExtras>({
     outline: undefined,
-    characters: undefined
+    characters: undefined,
+    images: undefined,
   });
-
-  const [genre, setGenre] = useState("");
-  const [deadLine, setDeadLine] = useState<string | null>(null);
-  const [synopsis, setSynopsis] = useState<string | null>(null);
-  const [outline, setOutline] = useState<string | null>(null);
-  const [characters, setCharacters] = useState<string | null>(null);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // Character details
   const [characterData, setCharacterData] = useState<Character>({
@@ -62,125 +65,238 @@ export default function Landing() {
     gender: undefined,
     age: undefined,
     role: undefined,
-    images: undefined,
+    image: undefined,
   });
 
-  const [characterName, setCharacterName] = useState("");
-  const [characterDescription, setCharacterDescription] = useState("");
-  const [characterGender, setCharacterGender] = useState("");
-  const [characterAge, setCharacterAge] = useState("");
-  const [characterType, setCharacterType] = useState("");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [loading, setLoading] = useState(true);
+
+  // Handle file selection and preview the avatar
+  const handleCharacterImageFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file: File | undefined = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCharacterData({
+          ...characterData,
+          image: reader.result as string,
+        }); // Set the selected image as the new source
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const createCharacter = () => {
+    let characters = projectExtras.characters || [];
+    characters.push(characterData);
+    console.log(characters);
+    setProjectExtras({ ...projectExtras, characters: characters });
+    setCharacterData({
+      name: undefined,
+      personality: undefined,
+      background: undefined,
+      gender: undefined,
+      age: undefined,
+      role: undefined,
+      image: undefined,
+    });
+  };
+
+  const getProfile = async () => {
+    try {
+      const store = await load("settings.json", { autoSave: true });
+      // Get profile value
+      const profile = await store.get<Profile>("profile");
+      if (profile) {
+        setProfile(profile?.profile_name);
+      } else {
+        router.replace("/landing");
+      }
+    } catch (error) {
+      router.replace("/landing");
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Stop loading when done
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  if (loading) {
+    return <></>;
+  }
   return (
-    <>
-      <div className="flex items-start justify-center w-full min-h-screen p-24 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <main className="flex flex-col gap-8 row-start-1 w-full">
-          {/* Back to Dashboard button */}
-          <Button
-            color="secondary"
-            variant="flat"
-            className="mb-4 self-start"
-            onPress={() => router.push("/dashboard")}
-          >
-            Back to Dashboard
-          </Button>
-
-          <h3 className="text-4xl font-medium">Create a new project</h3>
-          <Form
-            className="flex flex-col space-y-6 w-full"
-            onSubmit={(event) => {
-              event.preventDefault();
-              let data = Object.fromEntries(new FormData(event.currentTarget));
-            }}
-          >
-            {/* Project Name */}
-            <h4 className="text-2xl font-medium">Project Name</h4>
-            <Input
-              type="text"
-              placeholder="Enter your project name"
-              classNames={inputStyles}
-              name="name"
-              className="w-3/12"
-              isRequired
-            />
-
-            {/* Project Type */}
-            <h4 className="text-2xl font-medium">Project Category</h4>
-            <Select
-              className="w-3/12"
-              defaultSelectedKeys={["novel"]}
-              placeholder="Select category"
-              isRequired
-              name="category"
+    <Suspense fallback={null}>
+      <>
+        <div className="flex items-start justify-center w-full min-h-screen p-24 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+          <main className="flex flex-col gap-8 row-start-1 w-full">
+            {/* Back to Dashboard button */}
+            <Button
+              color="secondary"
+              variant="flat"
+              className="mb-4 self-start"
+              onPress={() => router.push(`/dashboard?profile=${profile}`)}
             >
-              <SelectItem key="novel" startContent={<BookMarked />} value={"Novel"}>
-                Novel
-              </SelectItem>
-              <SelectItem key="childrens" startContent={<Baby />} value={"Children's Book"}>
-                Children's Book
-              </SelectItem>
-            </Select>
-
-            {/* Project Genre */}
-            <h4 className="text-2xl font-medium">Project Genre</h4>
-            <Select
-              className="w-3/12"
-              placeholder="Select project genre"
-              isRequired
-              onChange={(event) => setGenre(event.target.value)}
+              Back to Dashboard
+            </Button>
+            <div className="flex flex-row gap-8 w-full">
+              <h3 className="text-4xl font-medium">Create a new project</h3>
+              <Button
+              color="primary"
+              variant="flat"
+              className="mb-4 self-start"
+              onPress={() => null}
             >
-              {genres.map((genre: any) => (
-                <SelectItem key={genre.key}>{genre.label}</SelectItem>
-              ))}
-            </Select>
-
-            {/* Deadline for the project */}
-            <h4 className="text-2xl font-medium">Deadline</h4>
-            <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-              <DatePicker
-                isRequired
+              <Sparkle/>
+              Get ideas
+            </Button>
+            </div>
+            <Form
+              className="flex flex-col space-y-6 w-full"
+              onSubmit={(event) => {
+                event.preventDefault();
+                let data = "";
+              }}
+            >
+              {/* Project Name */}
+              <h4 className="text-2xl font-medium">Project Name</h4>
+              <Input
+                type="text"
+                placeholder="Enter your project name"
+                classNames={inputStyles}
+                name="name"
                 className="w-3/12"
-                disableAnimation
-                onChange={(event) => setDeadLine(event.toString())}
+                isRequired
+                onChange={(event) =>
+                  setProjectData({ ...projectData, name: event.target.value })
+                }
               />
-            </div>
 
-            {/* Synopsis */}
-            <h4 className="text-2xl font-medium">Synopsis</h4>
-            <Textarea
-              onChange={(event) => setSynopsis(event.target.value)}
-              className="w-6/12"
-              minRows={8}
-              placeholder="Type your synopsis"
-            />
+              {/* Project Type */}
+              <h4 className="text-2xl font-medium">Project Category</h4>
+              <Select
+                className="w-3/12"
+                defaultSelectedKeys={["novel"]}
+                placeholder="Select category"
+                isRequired
+                name="category"
+                onChange={(event) =>
+                  setProjectData({
+                    ...projectData,
+                    category: event.target.value as "Children's Book" | "Novel",
+                  })
+                }
+              >
+                <SelectItem
+                  key="novel"
+                  startContent={<BookMarked />}
+                  value={"Novel"}
+                >
+                  Novel
+                </SelectItem>
+                <SelectItem
+                  key="childrens"
+                  startContent={<Baby />}
+                  value={"Children's Book"}
+                >
+                  Children's Book
+                </SelectItem>
+              </Select>
 
-            {/* Outline */}
-            <h4 className="text-2xl font-medium">Outline</h4>
-            <Textarea
-              onChange={(event) => setOutline(event.target.value)}
-              className="w-6/12"
-              minRows={8}
-              placeholder="Type your outline"
-            />
+              {/* Project Genre */}
+              <h4 className="text-2xl font-medium">Project Genre</h4>
+              <Select
+                className="w-3/12"
+                placeholder="Select project genre"
+                isRequired
+                onChange={(event) =>
+                  setProjectData({ ...projectData, genre: event.target.value })
+                }
+              >
+                {genres.map((genre: any) => (
+                  <SelectItem key={genre.key}>{genre.label}</SelectItem>
+                ))}
+              </Select>
 
-            {/* Characters */}
-            <div className="flex flex-row items-center justify-between w-6/12">
-              <h4 className="text-2xl font-medium">Characters</h4>
-              <Button onPress={onOpen} color="primary">
-                Add a character
-              </Button>
-            </div>
-            <div className="w-6/12 min-h-44 flex flex-col items-center justify-center justify-items-center bg-default-100 rounded-lg">
-              {characters ? (
-                <>hell</>
-              ) : (
+              {/* Deadline for the project */}
+              <h4 className="text-2xl font-medium">Deadline</h4>
+              <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                <DatePicker
+                  isRequired
+                  className="w-3/12"
+                  disableAnimation
+                  onChange={(event) =>
+                    setProjectData({
+                      ...projectData,
+                      deadline: event.toString(),
+                    })
+                  }
+                />
+              </div>
+
+              {/* Synopsis */}
+              <h4 className="text-2xl font-medium">Synopsis</h4>
+              <Textarea
+                onChange={(event) =>
+                  setProjectData({
+                    ...projectData,
+                    synopsis: event.target.value,
+                  })
+                }
+                className="w-6/12"
+                minRows={8}
+                placeholder="Type your synopsis"
+              />
+
+              {/* Outline */}
+              <h4 className="text-2xl font-medium">Outline</h4>
+              <Textarea
+                onChange={(event) =>
+                  setProjectExtras({
+                    ...projectExtras,
+                    outline: event.target.value,
+                  })
+                }
+                className="w-6/12"
+                minRows={8}
+                placeholder="Type your outline"
+              />
+
+              {/* Characters */}
+              <div className="flex flex-row items-center justify-between w-6/12">
+                <h4 className="text-2xl font-medium">Characters</h4>
+                <Button onPress={onOpen} color="primary">
+                  Add a character
+                </Button>
+              </div>
+              <div className="w-6/12 min-h-44 grid grid-flow-col justify-around overflow-x-scroll space-x-8 p-8 bg-default-100 rounded-lg">
+                {projectExtras.characters && 
+                    projectExtras.characters.map((character, key) => (
+                      <CharacterCard
+                        name={character.name}
+                        gender={character.gender}
+                        age={character.age}
+                        role={character.role}
+                        background={character.background}
+                        personality={character.personality}
+                        image={character.image}
+                        key={key}
+                      ></CharacterCard>
+                    ))}
                 <div className="">
-                  No characters
+                  {!projectExtras.characters && "No characters" }
                   <Modal
                     isOpen={isOpen}
                     onOpenChange={onOpenChange}
                     size="3xl"
                     backdrop="blur"
+                    scrollBehavior="inside"
+                    className="scrollbar-default"
                   >
                     <ModalContent>
                       {(onClose) => (
@@ -189,67 +305,124 @@ export default function Landing() {
                             Enter character details
                           </ModalHeader>
                           <ModalBody>
-                            <Input
-                              label="Name"
-                              placeholder="Enter character name"
-                              isRequired
-                              name="character-name"
-                              value={characterName}
-                              onChange={(event) =>
-                                setCharacterName(event.target.value)
-                              }
-                              fullWidth
-                            />
-                            <RadioGroup
-                              name="character-gender"
-                              label="Gender"
-                              value={characterGender}
-                              onChange={(event) =>
-                                setCharacterGender(event.target.value)
-                              }
-                              orientation="horizontal"
-                              className="mt-2"
-                            >
-                              <Radio value="Male">Male</Radio>
-                              <Radio value="Female">Female</Radio>
-                              <Radio value="Other">Other</Radio>
-                            </RadioGroup>
-                            <Input
-                              label="Age"
-                              placeholder="Enter character age"
-                              name="character-age"
-                              value={characterAge}
-                              onChange={(event) =>
-                                setCharacterAge(event.target.value)
-                              }
-                              fullWidth
-                            />
-                            <Input
-                              label="Type"
-                              placeholder="Enter character type (Protagonist, antagonist, etc.)"
-                              name="character-type"
-                              value={characterType}
-                              onChange={(event) =>
-                                setCharacterType(event.target.value)
-                              }
-                              fullWidth
-                            />
-                            <Textarea
-                              value={characterDescription}
-                              onChange={(event) =>
-                                setCharacterDescription(event.target.value)
-                              }
-                              className="w-full"
-                              label="Description"
-                              minRows={8}
-                              placeholder="Type your description"
-                            />
-                            <h4 className="text-lg">Image</h4>
-                            <Image
-                              alt="NextUI hero Image"
-                              src="https://nextui.org/images/hero-card-complete.jpeg"
-                              width={300}
-                            />
+                            <Form>
+                              <Input
+                                label="Name"
+                                placeholder="Enter character name"
+                                isRequired
+                                name="character-name"
+                                value={characterData.name}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    name: event.target.value,
+                                  })
+                                }
+                                fullWidth
+                              />
+                              <RadioGroup
+                                name="character-gender"
+                                label="Gender"
+                                value={characterData.gender}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    gender: event.target.value as
+                                      | "M"
+                                      | "F"
+                                      | "O",
+                                  })
+                                }
+                                orientation="horizontal"
+                                className="mt-2"
+                              >
+                                <Radio value="M">Male</Radio>
+                                <Radio value="F">Female</Radio>
+                                <Radio value="O">Other</Radio>
+                              </RadioGroup>
+                              <Input
+                                label="Age"
+                                placeholder="Enter character age"
+                                name="character-age"
+                                value={characterData.age?.toString()}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    age: Number.parseInt(event.target.value),
+                                  })
+                                }
+                                fullWidth
+                              />
+                              <Input
+                                label="Type"
+                                placeholder="Enter character type (Protagonist, antagonist, etc.)"
+                                name="character-type"
+                                value={characterData.role}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    role: event.target.value,
+                                  })
+                                }
+                                fullWidth
+                              />
+                              <Textarea
+                                value={characterData.background}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    background: event.target.value,
+                                  })
+                                }
+                                className="w-full"
+                                label="Background"
+                                minRows={8}
+                                placeholder="Enter background of character"
+                              />
+                              <Textarea
+                                value={characterData.personality}
+                                onChange={(event) =>
+                                  setCharacterData({
+                                    ...characterData,
+                                    personality: event.target.value,
+                                  })
+                                }
+                                className="w-full"
+                                label="Personality"
+                                minRows={8}
+                                placeholder="Enter personality of character"
+                              />
+
+                              <h4 className="text-lg">Image</h4>
+                              <label
+                                htmlFor="character-image"
+                                className="flex flex-row gap-8 row-start-2 items-center justify-center justify-items-center bg-default-50"
+                              >
+                                {characterData.image ? (
+                                  <Image
+                                    id="character-image"
+                                    src={characterData.image}
+                                    alt="Avatar"
+                                    className="w-56 h-40 object-cover transition-all"
+                                  />
+                                ) : (
+                                  <></>
+                                )}
+                                <input
+                                  type="file"
+                                  className="text-sm text-gray-500/0 cursor-pointer
+                                    file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                                    file:text-sm file:font-semibold file:bg-blue-600
+                                  file:text-white hover:file:bg-blue-700 file:disabled:opacity-50
+                                    file:disabled:pointer-events-none
+                                    dark:text-neutral-500/0
+                                    dark:file:bg-blue-500
+                                    dark:hover:file:bg-blue-400"
+                                  accept="image/*"
+                                  onChange={handleCharacterImageFileChange}
+                                />
+                              </label>
+                            </Form>
                           </ModalBody>
                           <ModalFooter>
                             <Button
@@ -259,7 +432,13 @@ export default function Landing() {
                             >
                               Close
                             </Button>
-                            <Button color="primary" onPress={onClose}>
+                            <Button
+                              color="primary"
+                              onPress={() => {
+                                createCharacter();
+                                return onClose();
+                              }}
+                            >
                               Create
                             </Button>
                           </ModalFooter>
@@ -268,18 +447,16 @@ export default function Landing() {
                     </ModalContent>
                   </Modal>
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* Submit Button */}
-            <Link href="../project">
+              {/* Submit Button */}
               <Button color="primary" className="mt-8 w-6/12" type="submit">
                 Create
               </Button>
-            </Link>
-          </Form>
-        </main>
-      </div>
-    </>
+            </Form>
+          </main>
+        </div>
+      </>
+    </Suspense>
   );
 }
