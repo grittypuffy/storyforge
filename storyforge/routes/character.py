@@ -1,18 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import List, Optional
 from pydantic import BaseModel
-from services.characters.character_description import generate_character_descriptions
-from services.characters.character_image import generate_character_image
-from services.characters.name import suggest_character_names
+from storyforge.services.character import generate_character_descriptions
+from storyforge.services.character import generate_character_image
+from storyfore.services.character import suggest_character_names
 
-characterRouter = APIRouter()
+character_router = APIRouter()
 
-# Response model for character descriptions
-class CharacterDescriptionResponse(BaseModel):
-    descriptions: List[str]
 
-@characterRouter.get("/character/description", response_model=CharacterDescriptionResponse)
-async def generateDescriptions(
+@character_router.get("/description", response_model=CharacterDescriptionResponse)
+async def generate_descriptions(
     story: str,
     charactersList: List[str] = Query(..., alias="characters_list")
 ):
@@ -26,12 +23,8 @@ async def generateDescriptions(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Response model for character image
-class CharacterImageResponse(BaseModel):
-    image: list
-
-@characterRouter.get("/character/image", response_model=CharacterImageResponse)
-async def generateImage(
+@character_router.get("/image", response_model=CharacterImageResponse)
+async def generate_image(
     characterName: str,
     characterDescription: str,
     characterAge: int,
@@ -49,12 +42,9 @@ async def generateImage(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Response model for character names
-class CharacterNameResponse(BaseModel):
-    names: List[str]
 
-@characterRouter.get("/character/name", response_model=CharacterNameResponse)
-async def suggestNames(
+@character_router.get("/name", response_model=CharacterNameResponse)
+async def suggest_names(
     characterCount: int,
     gendersList: List[str] = Query(..., alias="genders_list"),
     nationalityList: List[str] = Query(..., alias="nationality_list")
