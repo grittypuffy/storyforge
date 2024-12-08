@@ -1,8 +1,8 @@
 <div style="text-align: center;">
 <dic style=" display: flex; flex-direction: row; justify-items: center; align-items: center;">
-    <img src="./assets/HE_logo.png" height="150" width="400" alt="HackerEarth Logo" />
+    <img src="./assets/HE_logo.png" height="150" width="400" alt="HackerEarth Logo" style="background-color: white;" />
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="https://www.intel.com/content/dam/logos/intel-footer-logo.svg" height="300" width="300" alt="Intel Logo" />
+    <img src="https://www.intel.com/content/dam/www/central-libraries/us/en/images/intel-new-logo-16x9.jpg" height="150" width="300" alt="Intel Logo" />
 </div>
 <h1>HACKSTORM: INTEL® AI PC EDITION December 2024</h1>
 <h3>
