@@ -18,6 +18,7 @@ pub fn migrate() -> Vec<Migration> {
         sql: r#"CREATE TABLE IF NOT EXISTS project (
                 id TEXT PRIMARY KEY,
                 profile_id TEXT,
+                title TEXT NOT NULL,
                 genre TEXT,
                 category TEXT CHECK (category IN ('Novel', 'Children''s Book')),
                 deadline DATE,
