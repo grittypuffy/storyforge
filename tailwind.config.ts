@@ -17,7 +17,9 @@ export default {
     },
   },
   plugins: [
+    require("@tailwindcss/typography"),
     nextui()
+
   ],
   darkMode: "class"
 } satisfies Config;

@@ -448,7 +448,6 @@ export default function CreateProject() {
                   </Modal>
                 </div>
               </div>
-
               {/* Submit Button */}
               <Button color="primary" className="mt-8 w-6/12" type="submit">
                 Create
