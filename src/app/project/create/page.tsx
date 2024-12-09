@@ -24,11 +24,9 @@ import {
 } from "@nextui-org/react";
 
 import { FormEvent, Suspense, useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   mkdir,
-  BaseDirectory,
   create,
   writeTextFile,
 } from "@tauri-apps/plugin-fs";
