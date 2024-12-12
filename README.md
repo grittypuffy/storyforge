@@ -145,7 +145,7 @@ Using the LCM_Dreamshaper_v7-int8-ov model, StoryForge creates high-quality illu
 | Cover Images             | Creates eye-catching designs based on the book’s synopsis.                       |
 | Story Outlines           | Assists in planning the narrative structure.                                     |
 | Story Suggestions        | Proposes ideas to keep the narrative engaging and coherent.                      |
-| Synopses                 | Summarizes the plot to pitch to publishers or readers.                           |
+| Synopsis                 | Summarizes the plot to pitch to publishers or readers.                           |
 | Title Generation         | Suggests compelling titles for novels.                                           |
 | Chapter Suggestions      | Offers ideas to expand or refine story progression.                              |
 | Story Reconstruction     | Revamps content for improved readability and alignment with the writer’s intent. |
